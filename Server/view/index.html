@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+src="http://maps.googleapis.com/maps/api/js">
+</script>
+<script src="../js/server.js" type="text/javascript"></script>
+<script>
+    function initialize() {
+        var mapProp = {
+            center: new google.maps.LatLng(-0.361887,-78.477272),
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        cargarCoordenadas(map);
+        //a(map);
+    }
+    function a(map) {
+        var myLatlng = new google.maps.LatLng(-1.301011, -78.63283);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            title: "Hola, Australia!"
+        });
+        marker.setMap(map);
+    }
+    function cargarCoordenadas(map) {
+        var archivo = "texto.txt";
+        var linea;
+        if (file_exists(archivo)) {
+            //existe ese fichero
+            //document.write("<h2>El fichero " + archivo + " existe en el servidor</h2>");
+            var texto_fichero = file_get_contents(archivo);
+            linea = texto_fichero.split("\n");
+            for (var i = 0; i < linea.length; i++) {
+                var contenido = linea[i].split("\t");
+                var latitude = contenido[0];
+                var longitude = contenido[1];
+                var categoria = contenido[2];
+                if (categoria == 7) {
+                    var myLatlng = new google.maps.LatLng(latitude, longitude);
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        title: categoria
+                    });
+
+                    marker.setMap(map);
+                }
+            }
+        }
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</head>
+
+<body>
+<div id="googleMap" style="width:2000px;height:1080px;"></div>
+<div id="miDiv"></div>
+<div id="fileOutput"></div>
+
+</body>
+</html>
